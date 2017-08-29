@@ -2,9 +2,8 @@
 title: "Assignment 1 - Reproducible Research"
 author: "Per Linde"
 date: "29 augusti 2017"
-output: 
-    html_document:
-        keep_md: true
+output: html_document
+
 ---
 
 ```{r setup, include=FALSE}
