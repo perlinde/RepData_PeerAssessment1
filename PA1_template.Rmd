@@ -5,10 +5,10 @@ date: "29 augusti 2017"
 output: html_document
 ---
 
-##Introduction  
+## Introduction  
 This page contains the code and output for Course Project 1 on the course "Reproducible Research" given by John Hopkins University via Coursera.
 
-###Loading and preprocessing the data
+### Loading and preprocessing the data
 First we will read the data. This assumes that the data has been downloaded and is in your working directory
 ```{r}
 raw <- read.csv("activity.csv")
@@ -26,7 +26,7 @@ raw$date <- as.Date(raw$date)
 ```
 
 
-###What is the mean number of steps taken per day?  
+### What is the mean number of steps taken per day?  
 This part of the assignment will ignore the missing values in the data set. To analyze the data I will use the tidyverse package by Hadley Wickham. Let´s load tidyverse.
 ```{r}
 library(tidyverse)
@@ -48,7 +48,7 @@ median(stepsPerDay$nrSteps, na.rm=TRUE)
 ```
 As we can see, the mean and median are quite similar with the mean being 10766 steps per day and the median being 10765 steps per day.  
 
-###What is the average daily activity pattern?
+### What is the average daily activity pattern?
 To plot the average number of steps taken averaged across all days against the 5-minute interval we need to do some data preparation. The code below calculates the average number of steps in each interval averaged across all days and makes the line plot.
 ```{r}
 stepsByInterval <- raw %>% group_by(interval) %>% summarize(nrSteps = mean(steps, na.rm=TRUE))
@@ -62,7 +62,7 @@ filter(stepsByInterval, nrSteps == max(nrSteps))
 ```
   
   
-###Imputing missing values
+### Imputing missing values
 As mentioned before, the data contains missing values, coded as NA. First I will calculate the total number of missing values in the data set. The code below will calculate the number of missing values in each column. This will let me know whether several columns contain missing values or of it is only the steps variable that have missing values.
 ```{r}
 apply(raw, 2, function(x) sum(is.na(x)))
@@ -91,7 +91,7 @@ median(stepsPerDay2$nrSteps, na.rm=TRUE)
 ```
 The imputed values have not changed the mean or median number of total steps per day much at all. In fact, theu mean is exactly the same as it was before, and lo and behold, after imputing the missing values, the median is actually now the exact same number as well.  
 
-###Are there differences in activity patterns between weekdays and weekends?
+### Are there differences in activity patterns between weekdays and weekends?
 The first thing we need to do here is to create a factor variable with two labels - "weekday" and "weekend" to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the weekdays(). I will then use this variable to create the variable that indicates weekday or weekend day.
 ```{r}
 processedData$dayOfWeek <- weekdays(processedData$date)
