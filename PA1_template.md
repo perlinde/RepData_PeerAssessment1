@@ -3,10 +3,7 @@ title: "Assignment 1 - Reproducible Research"
 author: "Per Linde"
 date: "29 augusti 2017"
 output: html_document
-
 ---
-
-
 
 ##Introduction  
 This page contains the code and output for Course Project 1 on the course "Reproducible Research" given by John Hopkins University via Coursera.
@@ -39,7 +36,7 @@ raw$date <- as.Date(raw$date)
 ```
 
 
-###What is the mean number of steps taken per day?
+###What is the mean number of steps taken per day?  
 This part of the assignment will ignore the missing values in the data set. To analyze the data I will use the tidyverse package by Hadley Wickham. Let´s load tidyverse.
 
 ```r
