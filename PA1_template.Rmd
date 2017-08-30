@@ -92,10 +92,11 @@ median(stepsPerDay2$nrSteps, na.rm=TRUE)
 The imputed values have not changed the mean or median number of total steps per day much at all. In fact, theu mean is exactly the same as it was before, and lo and behold, after imputing the missing values, the median is actually now the exact same number as well.  
 
 ### Are there differences in activity patterns between weekdays and weekends?
-The first thing we need to do here is to create a factor variable with two labels - "weekday" and "weekend" to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the weekdays(). I will then use this variable to create the variable that indicates weekday or weekend day.
+The first thing we need to do here is to create a factor variable with two labels - "weekday" and "weekend" to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the wday() function from the lubridate package.. I will then use this variable to create the variable that indicates weekday or weekend day.
 ```{r}
-processedData$dayOfWeek <- weekdays(processedData$date)
-processedData$timeofWeek <- as.factor(ifelse(processedData$dayOfWeek == "lördag" | processedData$dayOfWeek == "söndag", "weekend", "weekday"))
+library(lubridate)
+processedData$dayOfWeek <- wday(processedData$date, label=TRUE)
+processedData$timeofWeek <- as.factor(ifelse(processedData$dayOfWeek == "Sat" | processedData$dayOfWeek == "Sun", "weekend", "weekday"))
 ```
   
 To make a pretty panel plot we can use the lattice package. Before plotting we need to summarize the data once again. This time we need to calculate the mean number of steps per interval depending on whether the day was a weekday or a weekend day. The code below takes care of the calculation and the plot.

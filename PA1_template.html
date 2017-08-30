@@ -205,9 +205,15 @@ hist(stepsPerDay2$nrSteps, xlab=&quot;Nr of Steps&quot;, ylab=&quot;Count&quot;,
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level3">
 <h3>Are there differences in activity patterns between weekdays and weekends?</h3>
-<p>The first thing we need to do here is to create a factor variable with two labels - “weekday” and “weekend” to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the weekdays(). I will then use this variable to create the variable that indicates weekday or weekend day.</p>
-<pre class="r"><code>processedData$dayOfWeek &lt;- weekdays(processedData$date)
-processedData$timeofWeek &lt;- as.factor(ifelse(processedData$dayOfWeek == &quot;lördag&quot; | processedData$dayOfWeek == &quot;söndag&quot;, &quot;weekend&quot;, &quot;weekday&quot;))</code></pre>
+<p>The first thing we need to do here is to create a factor variable with two labels - “weekday” and “weekend” to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the wday() function from the lubridate package.. I will then use this variable to create the variable that indicates weekday or weekend day.</p>
+<pre class="r"><code>library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: 'lubridate'</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     date</code></pre>
+<pre class="r"><code>processedData$dayOfWeek &lt;- wday(processedData$date, label=TRUE)
+processedData$timeofWeek &lt;- as.factor(ifelse(processedData$dayOfWeek == &quot;Sat&quot; | processedData$dayOfWeek == &quot;Sun&quot;, &quot;weekend&quot;, &quot;weekday&quot;))</code></pre>
 <p>To make a pretty panel plot we can use the lattice package. Before plotting we need to summarize the data once again. This time we need to calculate the mean number of steps per interval depending on whether the day was a weekday or a weekend day. The code below takes care of the calculation and the plot.</p>
 <pre class="r"><code>stepsByInterval2 &lt;- processedData %&gt;% group_by(interval, timeofWeek) %&gt;%
     summarize(avgSteps = mean(steps))

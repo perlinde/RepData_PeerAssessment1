@@ -53,7 +53,7 @@ Now let´s plot a histogram of the number of steps taken per day.
 hist(stepsPerDay$nrSteps, xlab="Nr of Steps", ylab="Count", main="Histogram of total number of steps per day")
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-29](figure/unnamed-chunk-29-1.png)
   
 Choosing a binwidth for a histogram is always a bit tricky. Here I just go with the default from the base plotting system, which gives a decent feeling for how the total number of steps per day is distributed. The mean seems to be somewhere between 10000 and 15000 steps per day. To calculate the actual mean and median we can use the mean() and median() functions in R. Note that we need to tell R to specifically ignore the missing values, if not the function will just return NA.
 
@@ -83,7 +83,7 @@ stepsByInterval <- raw %>% group_by(interval) %>% summarize(nrSteps = mean(steps
 with(stepsByInterval, plot(interval, nrSteps, type="l", col="blue", ylab="Avg number of steps", xlab="Interval", main="Daily Activity Pattern"))
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-31](figure/unnamed-chunk-31-1.png)
   
 The next task is to find the 5-minute interval that has the maximum number of average steps across all days in the dataset. Using the code below we see that interval 835 has the highest average number of steps with just over 206 steps. 
 
@@ -133,7 +133,7 @@ stepsPerDay2 <- processedData %>% group_by(date) %>%
 hist(stepsPerDay2$nrSteps, xlab="Nr of Steps", ylab="Count", main="Histogram of total number of steps per day - Including imputed values")
 ```
 
-![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-35](figure/unnamed-chunk-35-1.png)
 The histogram of the data looks very similar to what it did before imputing values. Let´s look at the mean and median daily number of steps to see how much they have changed as a consequence of the imputed values.
 
 ```r
@@ -154,11 +154,12 @@ median(stepsPerDay2$nrSteps, na.rm=TRUE)
 The imputed values have not changed the mean or median number of total steps per day much at all. In fact, theu mean is exactly the same as it was before, and lo and behold, after imputing the missing values, the median is actually now the exact same number as well.  
 
 ### Are there differences in activity patterns between weekdays and weekends?
-The first thing we need to do here is to create a factor variable with two labels - "weekday" and "weekend" to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the weekdays(). I will then use this variable to create the variable that indicates weekday or weekend day.
+The first thing we need to do here is to create a factor variable with two labels - "weekday" and "weekend" to indicate wheter a give ndate is a weekday or a weekend day. To do this, I will first create a variable containing the weekday for each date using the wday() function from the lubridate package.. I will then use this variable to create the variable that indicates weekday or weekend day.
 
 ```r
-processedData$dayOfWeek <- weekdays(processedData$date)
-processedData$timeofWeek <- as.factor(ifelse(processedData$dayOfWeek == "lördag" | processedData$dayOfWeek == "söndag", "weekend", "weekday"))
+library(lubridate)
+processedData$dayOfWeek <- wday(processedData$date, label=TRUE)
+processedData$timeofWeek <- as.factor(ifelse(processedData$dayOfWeek == "Sat" | processedData$dayOfWeek == "Sun", "weekend", "weekday"))
 ```
   
 To make a pretty panel plot we can use the lattice package. Before plotting we need to summarize the data once again. This time we need to calculate the mean number of steps per interval depending on whether the day was a weekday or a weekend day. The code below takes care of the calculation and the plot.
@@ -176,6 +177,6 @@ with(stepsByInterval2,
              layout=c(1,2)))
 ```
 
-![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-38](figure/unnamed-chunk-38-1.png)
   
 Looking at the plot we can spot a few differences between the activity on weekends and weekdays. On weekdays there is a clear peak in activity early in the day and then fairly low activity throughout the day. On weekends there is less of a peak. Instead the activity is more evenly spread out through the entire day.
